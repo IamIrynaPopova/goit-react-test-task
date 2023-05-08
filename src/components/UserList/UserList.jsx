@@ -16,11 +16,10 @@ const UserList = () => {
     <>
       <ul className={css.list}>
         {users.map((customer) => {
-          const { user, tweets, followers, avatar, id } = customer;
+          const { tweets, followers, avatar, id } = customer;
           return (
             <UserItem
               key={id}
-              user={user}
               tweets={tweets}
               followers={followers}
               avatar={avatar}

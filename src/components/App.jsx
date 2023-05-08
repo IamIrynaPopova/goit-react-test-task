@@ -1,8 +1,11 @@
 import UserList from "./UserList/UserList";
+import Layout from "./Layout/Layout";
 
 function App() {
   return (
-  <UserList/>
+    <Layout>
+      <UserList />
+    </Layout>
   );
 }
 
