@@ -1,8 +1,49 @@
-import css from "./UserItem.module.css";
+import { useState, useEffect } from "react";
 import logo from "../../images/Logo.png";
 import picture from "../../images/picture.png";
+import css from "./UserItem.module.css";
 
-const UserItem = ({ tweets, followers, avatar }) => {
+const UserItem = ({ user, tweets, followers, avatar, id }) => {
+  const [following, setFollowing] = useState(false);
+  const [userFollowers, setUserFollowers] = useState(followers);
+
+  useEffect(() => {
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const existingUser = users.find((user) => user.id === id);
+    if (existingUser) {
+      setFollowing(true);
+    }
+  }, [id]);
+
+  const handleFollow = (e) => {
+    const button = e.target;
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const existingUser = users.find((user) => user.id === id);
+
+    if (!existingUser) {
+      const isFollowingUser = {
+        user,
+        tweets,
+        followers: followers + 1,
+        avatar,
+        id,
+      };
+      users.push(isFollowingUser);
+      setUserFollowers(userFollowers + 1);
+      localStorage.setItem("users", JSON.stringify(users));
+      button.textContent = "Following";
+      button.classList.toggle(css["user__button--following"]);
+      setFollowing(true);
+    } else {
+      const updatedUsers = users.filter((user) => user.id !== id);
+      localStorage.setItem("users", JSON.stringify(updatedUsers));
+      setUserFollowers(userFollowers - 1);
+      button.textContent = "Follow";
+      button.classList.toggle(css["user__button--following"]);
+      setFollowing(false);
+    }
+  };
+
   return (
     <li className={css.user}>
       <div className={css.user__card}>
@@ -14,9 +55,15 @@ const UserItem = ({ tweets, followers, avatar }) => {
         </div>
         <div className={css.user__stats}>
           <span className={css.user__tweets}>{tweets} tweets</span>
-          <span className={css.user__followers}>{followers} Followers</span>
-          <button type="button" className={css.user__button}>
-            Follow
+          <span className={css.user__followers}>{userFollowers} Followers</span>
+          <button
+            type="button"
+            className={`${css.user__button} ${
+              following ? css["user__button--following"] : ""
+            }`}
+            onClick={handleFollow}
+          >
+            {following ? "Following" : "Follow"}
           </button>
         </div>
       </div>

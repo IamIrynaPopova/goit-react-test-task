@@ -3,6 +3,7 @@ import fetchUsers from "./operations";
 
 const initialState = {
   users: [],
+  isFollowing: false,
 };
 
 const usersSlice = createSlice({
