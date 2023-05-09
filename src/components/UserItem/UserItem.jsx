@@ -15,8 +15,7 @@ const UserItem = ({ user, tweets, followers, avatar, id }) => {
     }
   }, [id]);
 
-  const handleFollow = (e) => {
-    const button = e.target;
+  const handleFollow = () => {
     const users = JSON.parse(localStorage.getItem("users") || "[]");
     const existingUser = users.find((user) => user.id === id);
 
@@ -31,13 +30,11 @@ const UserItem = ({ user, tweets, followers, avatar, id }) => {
       users.push(isFollowingUser);
       setUserFollowers(userFollowers + 1);
       localStorage.setItem("users", JSON.stringify(users));
-      button.classList.toggle(css["user__button--following"]);
       setFollowing(true);
     } else {
       const updatedUsers = users.filter((user) => user.id !== id);
       localStorage.setItem("users", JSON.stringify(updatedUsers));
       setUserFollowers(userFollowers - 1);
-      button.classList.toggle(css["user__button--following"]);
       setFollowing(false);
     }
   };
@@ -56,7 +53,9 @@ const UserItem = ({ user, tweets, followers, avatar, id }) => {
           <span className={css.user__followers}>{userFollowers} Followers</span>
           <button
             type="button"
-            className={css.user__button}
+            className={`${css.user__button} ${
+              following ? css["user__button--following"] : ""
+            }`}
             onClick={handleFollow}
           >
             {following ? "Following" : "Follow"}
