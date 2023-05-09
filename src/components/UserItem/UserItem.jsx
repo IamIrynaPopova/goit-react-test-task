@@ -13,6 +13,11 @@ const UserItem = ({ user, tweets, followers, avatar, id }) => {
     if (existingUser) {
       setFollowing(true);
     }
+
+    const savedFollowers = localStorage.getItem(`userFollowers_${id}`);
+    if (savedFollowers) {
+      setUserFollowers(Number(savedFollowers));
+    }
   }, [id]);
 
   const handleFollow = () => {
@@ -30,10 +35,12 @@ const UserItem = ({ user, tweets, followers, avatar, id }) => {
       users.push(isFollowingUser);
       setUserFollowers(userFollowers + 1);
       localStorage.setItem("users", JSON.stringify(users));
+      localStorage.setItem(`userFollowers_${id}`, userFollowers + 1);
       setFollowing(true);
     } else {
       const updatedUsers = users.filter((user) => user.id !== id);
       localStorage.setItem("users", JSON.stringify(updatedUsers));
+      localStorage.setItem(`userFollowers_${id}`, userFollowers - 1);
       setUserFollowers(userFollowers - 1);
       setFollowing(false);
     }
