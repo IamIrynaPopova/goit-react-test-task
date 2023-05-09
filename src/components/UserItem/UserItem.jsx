@@ -50,7 +50,9 @@ const UserItem = ({ user, tweets, followers, avatar, id }) => {
         </div>
         <div className={css.user__stats}>
           <span className={css.user__tweets}>{tweets} tweets</span>
-          <span className={css.user__followers}>{userFollowers} Followers</span>
+          <span className={css.user__followers}>
+            {userFollowers.toLocaleString().replace(/\s/g, ",")} Followers
+          </span>
           <button
             type="button"
             className={`${css.user__button} ${

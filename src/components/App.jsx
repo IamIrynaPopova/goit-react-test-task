@@ -16,26 +16,21 @@ const App = () => {
   useEffect(() => {
     const getUsers = async () => {
       try {
-        const fetchedUsers = await fetchUsers(page);
-        setUsers((prevUsers) => [...prevUsers, ...fetchedUsers]);
+        const fetchedUsers = await fetchUsers();
+        setUsers(fetchedUsers);
       } catch (error) {
         setError(error);
       }
     };
     getUsers();
-  }, [page]);
+  }, []);
 
   return (
     <Layout>
-      {error ? (
-        <b>{error}</b>
-      ) : (
-        <>
-          <UserList users={users.slice(0, page * 3)} />
-          {users.length > page * 3 && (
-            <LoadMore handleLoadMore={handleLoadMore} />
-          )}
-        </>
+      {error && <b>{error}</b>}
+      <UserList users={users.slice(0, page * 3)} />
+      {users.length <= page * 3 ? null : (
+        <LoadMore handleLoadMore={handleLoadMore} />
       )}
     </Layout>
   );
